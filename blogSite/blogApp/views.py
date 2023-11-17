@@ -13,3 +13,14 @@ def viewAll(request):
         serializers = BlogSerializer(studentList, many=True)
         return HttpResponse(json.dumps(serializers.data))
     
+@csrf_exempt
+def addBlog(request):
+    if request.method=="POST":
+        blogData=json.loads(request.body)
+        print(blogData)
+        serializer_add=BlogSerializer(data=blogData)
+        if serializer_add.is_vaild():
+            serializer_add.save()
+        return HttpResponse(json.dumps({"status":"Added Successfully"}))
+    else:
+        return HttpResponse(json.dumps({"status":"Failed to Add"}))
